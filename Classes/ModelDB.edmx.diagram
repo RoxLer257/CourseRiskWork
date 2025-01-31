@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="d4700ef346ee4f81add00df516dc3ee0" Name="Diagram1">
+        <EntityTypeShape EntityType="RiskBDModel.MitigationStrategies" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiskBDModel.RiskAssessments" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiskBDModel.RiskCategories" Width="1.5" PointX="0.75" PointY="4" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiskBDModel.RiskLevels" Width="1.5" PointX="3" PointY="7.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiskBDModel.Risks" Width="1.5" PointX="3" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="RiskBDModel.Users" Width="1.5" PointX="5.75" PointY="7" IsExpanded="true" />
+        <AssociationConnector Association="RiskBDModel.FK__Mitigatio__RiskI__52593CB8" ManuallyRouted="false" />
+        <AssociationConnector Association="RiskBDModel.FK__RiskAsses__Level__571DF1D5" ManuallyRouted="false" />
+        <AssociationConnector Association="RiskBDModel.FK__RiskAsses__RiskI__5535A963" ManuallyRouted="false" />
+        <AssociationConnector Association="RiskBDModel.FK__Risks__CategoryI__4AB81AF0" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

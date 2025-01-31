@@ -1,0 +1,362 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище RiskBDModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="MitigationStrategies">
+          <Key>
+            <PropertyRef Name="StrategyID" />
+          </Key>
+          <Property Name="StrategyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RiskID" Type="int" Nullable="false" />
+          <Property Name="StrategyName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+          <Property Name="ImplementationDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="RiskAssessments">
+          <Key>
+            <PropertyRef Name="AssessmentID" />
+          </Key>
+          <Property Name="AssessmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RiskID" Type="int" Nullable="false" />
+          <Property Name="AssessmentDate" Type="date" Nullable="false" />
+          <Property Name="LevelID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="RiskCategories">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CategoryName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" />
+        </EntityType>
+        <EntityType Name="RiskLevels">
+          <Key>
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="LevelID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LevelName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Risks">
+          <Key>
+            <PropertyRef Name="RiskID" />
+          </Key>
+          <Property Name="RiskID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="RiskName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="CategoryID" Type="int" Nullable="false" />
+          <Property Name="Probability" Type="float" />
+          <Property Name="Impact" Type="float" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="PasswordHash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="Role" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Mitigatio__RiskI__52593CB8">
+          <End Role="Risks" Type="Self.Risks" Multiplicity="1" />
+          <End Role="MitigationStrategies" Type="Self.MitigationStrategies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Risks">
+              <PropertyRef Name="RiskID" />
+            </Principal>
+            <Dependent Role="MitigationStrategies">
+              <PropertyRef Name="RiskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RiskAsses__Level__571DF1D5">
+          <End Role="RiskLevels" Type="Self.RiskLevels" Multiplicity="1" />
+          <End Role="RiskAssessments" Type="Self.RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskLevels">
+              <PropertyRef Name="LevelID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="LevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RiskAsses__RiskI__5535A963">
+          <End Role="Risks" Type="Self.Risks" Multiplicity="1" />
+          <End Role="RiskAssessments" Type="Self.RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Risks">
+              <PropertyRef Name="RiskID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="RiskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Risks__CategoryI__4AB81AF0">
+          <End Role="RiskCategories" Type="Self.RiskCategories" Multiplicity="1" />
+          <End Role="Risks" Type="Self.Risks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskCategories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Risks">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище RiskBDModelContainer">
+          <EntitySet Name="MitigationStrategies" EntityType="Self.MitigationStrategies" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiskAssessments" EntityType="Self.RiskAssessments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiskCategories" EntityType="Self.RiskCategories" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="RiskLevels" EntityType="Self.RiskLevels" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Risks" EntityType="Self.Risks" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Mitigatio__RiskI__52593CB8" Association="Self.FK__Mitigatio__RiskI__52593CB8">
+            <End Role="Risks" EntitySet="Risks" />
+            <End Role="MitigationStrategies" EntitySet="MitigationStrategies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RiskAsses__Level__571DF1D5" Association="Self.FK__RiskAsses__Level__571DF1D5">
+            <End Role="RiskLevels" EntitySet="RiskLevels" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RiskAsses__RiskI__5535A963" Association="Self.FK__RiskAsses__RiskI__5535A963">
+            <End Role="Risks" EntitySet="Risks" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Risks__CategoryI__4AB81AF0" Association="Self.FK__Risks__CategoryI__4AB81AF0">
+            <End Role="RiskCategories" EntitySet="RiskCategories" />
+            <End Role="Risks" EntitySet="Risks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="RiskBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="MitigationStrategies">
+          <Key>
+            <PropertyRef Name="StrategyID" />
+          </Key>
+          <Property Name="StrategyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RiskID" Type="Int32" Nullable="false" />
+          <Property Name="StrategyName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="ImplementationDate" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Risks" Relationship="Self.FK__Mitigatio__RiskI__52593CB8" FromRole="MitigationStrategies" ToRole="Risks" />
+        </EntityType>
+        <EntityType Name="RiskAssessments">
+          <Key>
+            <PropertyRef Name="AssessmentID" />
+          </Key>
+          <Property Name="AssessmentID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RiskID" Type="Int32" Nullable="false" />
+          <Property Name="AssessmentDate" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="LevelID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="RiskLevels" Relationship="Self.FK__RiskAsses__Level__571DF1D5" FromRole="RiskAssessments" ToRole="RiskLevels" />
+          <NavigationProperty Name="Risks" Relationship="Self.FK__RiskAsses__RiskI__5535A963" FromRole="RiskAssessments" ToRole="Risks" />
+        </EntityType>
+        <EntityType Name="RiskCategories">
+          <Key>
+            <PropertyRef Name="CategoryID" />
+          </Key>
+          <Property Name="CategoryID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CategoryName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Risks" Relationship="Self.FK__Risks__CategoryI__4AB81AF0" FromRole="RiskCategories" ToRole="Risks" />
+        </EntityType>
+        <EntityType Name="RiskLevels">
+          <Key>
+            <PropertyRef Name="LevelID" />
+          </Key>
+          <Property Name="LevelID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LevelName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="RiskAssessments" Relationship="Self.FK__RiskAsses__Level__571DF1D5" FromRole="RiskLevels" ToRole="RiskAssessments" />
+        </EntityType>
+        <EntityType Name="Risks">
+          <Key>
+            <PropertyRef Name="RiskID" />
+          </Key>
+          <Property Name="RiskID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="RiskName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="CategoryID" Type="Int32" Nullable="false" />
+          <Property Name="Probability" Type="Double" />
+          <Property Name="Impact" Type="Double" />
+          <NavigationProperty Name="MitigationStrategies" Relationship="Self.FK__Mitigatio__RiskI__52593CB8" FromRole="Risks" ToRole="MitigationStrategies" />
+          <NavigationProperty Name="RiskAssessments" Relationship="Self.FK__RiskAsses__RiskI__5535A963" FromRole="Risks" ToRole="RiskAssessments" />
+          <NavigationProperty Name="RiskCategories" Relationship="Self.FK__Risks__CategoryI__4AB81AF0" FromRole="Risks" ToRole="RiskCategories" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Mitigatio__RiskI__52593CB8">
+          <End Role="Risks" Type="Self.Risks" Multiplicity="1" />
+          <End Role="MitigationStrategies" Type="Self.MitigationStrategies" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Risks">
+              <PropertyRef Name="RiskID" />
+            </Principal>
+            <Dependent Role="MitigationStrategies">
+              <PropertyRef Name="RiskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RiskAsses__Level__571DF1D5">
+          <End Role="RiskLevels" Type="Self.RiskLevels" Multiplicity="1" />
+          <End Role="RiskAssessments" Type="Self.RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskLevels">
+              <PropertyRef Name="LevelID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="LevelID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__RiskAsses__RiskI__5535A963">
+          <End Role="Risks" Type="Self.Risks" Multiplicity="1" />
+          <End Role="RiskAssessments" Type="Self.RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Risks">
+              <PropertyRef Name="RiskID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="RiskID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Risks__CategoryI__4AB81AF0">
+          <End Role="RiskCategories" Type="Self.RiskCategories" Multiplicity="1" />
+          <End Role="Risks" Type="Self.Risks" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="RiskCategories">
+              <PropertyRef Name="CategoryID" />
+            </Principal>
+            <Dependent Role="Risks">
+              <PropertyRef Name="CategoryID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="RiskBDEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="MitigationStrategies" EntityType="Self.MitigationStrategies" />
+          <EntitySet Name="RiskAssessments" EntityType="Self.RiskAssessments" />
+          <EntitySet Name="RiskCategories" EntityType="Self.RiskCategories" />
+          <EntitySet Name="RiskLevels" EntityType="Self.RiskLevels" />
+          <EntitySet Name="Risks" EntityType="Self.Risks" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK__Mitigatio__RiskI__52593CB8" Association="Self.FK__Mitigatio__RiskI__52593CB8">
+            <End Role="Risks" EntitySet="Risks" />
+            <End Role="MitigationStrategies" EntitySet="MitigationStrategies" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RiskAsses__Level__571DF1D5" Association="Self.FK__RiskAsses__Level__571DF1D5">
+            <End Role="RiskLevels" EntitySet="RiskLevels" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__RiskAsses__RiskI__5535A963" Association="Self.FK__RiskAsses__RiskI__5535A963">
+            <End Role="Risks" EntitySet="Risks" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Risks__CategoryI__4AB81AF0" Association="Self.FK__Risks__CategoryI__4AB81AF0">
+            <End Role="RiskCategories" EntitySet="RiskCategories" />
+            <End Role="Risks" EntitySet="Risks" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище RiskBDModelContainer" CdmEntityContainer="RiskBDEntities">
+          <EntitySetMapping Name="MitigationStrategies">
+            <EntityTypeMapping TypeName="RiskBDModel.MitigationStrategies">
+              <MappingFragment StoreEntitySet="MitigationStrategies">
+                <ScalarProperty Name="StrategyID" ColumnName="StrategyID" />
+                <ScalarProperty Name="RiskID" ColumnName="RiskID" />
+                <ScalarProperty Name="StrategyName" ColumnName="StrategyName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ImplementationDate" ColumnName="ImplementationDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RiskAssessments">
+            <EntityTypeMapping TypeName="RiskBDModel.RiskAssessments">
+              <MappingFragment StoreEntitySet="RiskAssessments">
+                <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
+                <ScalarProperty Name="RiskID" ColumnName="RiskID" />
+                <ScalarProperty Name="AssessmentDate" ColumnName="AssessmentDate" />
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RiskCategories">
+            <EntityTypeMapping TypeName="RiskBDModel.RiskCategories">
+              <MappingFragment StoreEntitySet="RiskCategories">
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="CategoryName" ColumnName="CategoryName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RiskLevels">
+            <EntityTypeMapping TypeName="RiskBDModel.RiskLevels">
+              <MappingFragment StoreEntitySet="RiskLevels">
+                <ScalarProperty Name="LevelID" ColumnName="LevelID" />
+                <ScalarProperty Name="LevelName" ColumnName="LevelName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Risks">
+            <EntityTypeMapping TypeName="RiskBDModel.Risks">
+              <MappingFragment StoreEntitySet="Risks">
+                <ScalarProperty Name="RiskID" ColumnName="RiskID" />
+                <ScalarProperty Name="RiskName" ColumnName="RiskName" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="CategoryID" ColumnName="CategoryID" />
+                <ScalarProperty Name="Probability" ColumnName="Probability" />
+                <ScalarProperty Name="Impact" ColumnName="Impact" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="RiskBDModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="Username" ColumnName="Username" />
+                <ScalarProperty Name="PasswordHash" ColumnName="PasswordHash" />
+                <ScalarProperty Name="Role" ColumnName="Role" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

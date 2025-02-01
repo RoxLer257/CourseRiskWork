@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Data.Entity;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 
 namespace Risk_Work.Pages
 {
@@ -22,6 +23,24 @@ namespace Risk_Work.Pages
                 .Include(ms => ms.Risks)
                 .Include(ms => ms.Risks.RiskCategories).ToList();
             DtgMitStrat.ItemsSource = mitigarstrateg;
+            CheckUserRole();
+        }
+
+
+        public void CheckUserRole()
+        {
+            if (ClassFrame.UserID == 3)
+            {
+                AddMitStrag.Visibility = Visibility.Collapsed;
+                DelStrag.Visibility = Visibility.Collapsed;
+                EditStrateg.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                AddMitStrag.Visibility = Visibility.Visible;
+                DelStrag.Visibility = Visibility.Visible;
+                EditStrateg.Visibility = Visibility.Visible;
+            }
         }
 
         private void TxtSearch_TextChanged(object sender, TextChangedEventArgs e)

@@ -24,6 +24,32 @@ namespace Risk_Work.Pages
         {
             InitializeComponent();
             UpdateRiskList();
+            CheckUserRole();
+        }
+
+        public void CheckUserRole()
+        {
+            if(ClassFrame.UserID == 2)
+            {
+                BtnStatic.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                BtnStatic.Visibility= Visibility.Visible;
+            }
+
+            if(ClassFrame.UserID == 3)
+            {
+                EditRisk.Visibility = Visibility.Collapsed;
+                DelRisk.Visibility = Visibility.Collapsed;
+                AddRisk.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                EditRisk.Visibility = Visibility.Visible;
+                DelRisk.Visibility = Visibility.Visible;
+                AddRisk.Visibility = Visibility.Visible;
+            }
         }
         public void UpdateRiskList()
         {

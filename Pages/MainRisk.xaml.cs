@@ -2,13 +2,16 @@
 using System.Linq;
 using System.Windows.Controls;
 using System.Data.Entity;
-using System.Windows.Controls.Primitives;
-using System.ComponentModel;
-using System.Windows.Data;
-using System.Collections.Generic;
-using System.Collections;
+using OfficeOpenXml;
+using OfficeOpenXml.Drawing.Chart;
 using System;
 using System.Windows;
+using System.Drawing;
+using System.Data;
+using System.IO;
+using OfficeOpenXml.Style;
+using System.Diagnostics;
+using System.Windows.Media;
 
 namespace Risk_Work.Pages
 {
@@ -214,6 +217,92 @@ namespace Risk_Work.Pages
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка при фильтрации по дате: {ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+        private void BtnStatic_Click(object sender, RoutedEventArgs e)
+        {
+            GenerateRiskReport();
+        }
+
+        private void GenerateRiskReport()
+        {
+            try
+            {
+                var highRisks = RiskBDEntities.GetContext().RiskAssessments
+                    .Include(r => r.Risks)
+                    .Include(r => r.RiskLevels)
+                    .Include(r => r.Risks.RiskCategories)
+                    .Where(r => r.RiskLevels.LevelName == "Высокий")
+                    .ToList();
+
+                if (!highRisks.Any())
+                {
+                    MessageBox.Show("Нет данных о высоких рисках.");
+                    return;
+                }
+
+                ExcelPackage.LicenseContext = OfficeOpenXml.LicenseContext.NonCommercial;
+
+                using (ExcelPackage excelPackage = new ExcelPackage())
+                {
+                    ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add("Высокие риски");
+
+                    string[] headers = { "Риск", "Описание", "Вероятность", "Влияние", "Уровень риска", "Дата оценки", "Категория" };
+                    for (int i = 0; i < headers.Length; i++)
+                    {
+                        worksheet.Cells[1, i + 1].Value = headers[i];
+                    }
+
+                    using (ExcelRange range = worksheet.Cells["A1:G1"])
+                    {
+                        range.Style.Font.Bold = true;
+                        range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+                        range.Style.Fill.BackgroundColor.SetColor(System.Drawing.Color.FromArgb(173, 216, 230));
+                    }
+
+                    int row = 2;
+                    foreach (var risk in highRisks)
+                    {
+                        worksheet.Cells[row, 1].Value = risk.Risks.RiskName;
+                        worksheet.Cells[row, 2].Value = risk.Risks.Description;
+                        worksheet.Cells[row, 3].Value = risk.Risks.Probability;
+                        worksheet.Cells[row, 4].Value = risk.Risks.Impact;
+                        worksheet.Cells[row, 5].Value = risk.RiskLevels.LevelName;
+                        worksheet.Cells[row, 6].Value = risk.AssessmentDate.ToString("dd.MM.yyyy");
+                        worksheet.Cells[row, 7].Value = risk.Risks.RiskCategories.CategoryName;
+                        row++;
+                    }
+
+                    worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
+
+                    var chart = worksheet.Drawings.AddChart("RiskChart", eChartType.ColumnClustered);
+                    chart.Title.Text = "Анализ рисков";
+
+                    var xValues = worksheet.Cells["A2:A" + (row - 1)];
+                    var yValuesProbability = worksheet.Cells["C2:C" + (row - 1)];
+                    var yValuesImpact = worksheet.Cells["D2:D" + (row - 1)];
+
+                    chart.Series.Add(yValuesProbability, xValues).Header = "Вероятность";
+                    chart.Series.Add(yValuesImpact, xValues).Header = "Влияние";
+
+                    chart.SetPosition(0, 150, 8, 0);
+                    chart.SetSize(800, 400);
+
+                    string directoryPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Excel report");
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    string filePath = Path.Combine(directoryPath, "Risk_Report.xlsx");
+
+                    excelPackage.SaveAs(new FileInfo(filePath));
+                    Process.Start(new ProcessStartInfo(filePath) { UseShellExecute = true });
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка: {ex.Message}\n\nДетали: {ex.InnerException?.Message}");
             }
         }
     }

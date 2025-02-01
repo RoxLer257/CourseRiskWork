@@ -46,9 +46,9 @@
             </Grid>
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="50"/>
-                    <RowDefinition Height="3*"/>
-                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="35"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="35"/>
                 </Grid.RowDefinitions>
                 <StackPanel Grid.Row="1" Orientation="Vertical" VerticalAlignment="Center">
                     <Button x:Name="ResetFilters" Content="Сбросить фильтры" Height="25" FontSize="14"
@@ -96,6 +96,9 @@
                     <Button Content="Стратегия снижения рисков" Height="25" FontSize="14"
                             Width="200" Margin="10 10 10 10" Foreground="#5a5a5a"
                             x:Name="BtnMitStrat" Click="BtnMitStrat_Click"/>
+                    <Button Content="Отчет по рискам" Height="25" FontSize="14"
+                            Width="200" Margin="10" Foreground="#5a5a5a"
+                            x:Name="BtnStatic" Click="BtnStatic_Click"/>
                 </StackPanel>
             </Grid>
         </Grid>

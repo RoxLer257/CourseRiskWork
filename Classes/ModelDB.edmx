@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище RiskBDModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище RiskBDModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="MitigationStrategies">
           <Key>
             <PropertyRef Name="StrategyID" />
@@ -23,6 +23,7 @@
           <Property Name="RiskID" Type="int" Nullable="false" />
           <Property Name="AssessmentDate" Type="date" Nullable="false" />
           <Property Name="LevelID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" Nullable="false" />
         </EntityType>
         <EntityType Name="RiskCategories">
           <Key>
@@ -107,6 +108,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_RiskAssessments_Users">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="RiskAssessments" Type="Self.RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <EntityContainer Name="Хранилище RiskBDModelContainer">
           <EntitySet Name="MitigationStrategies" EntityType="Self.MitigationStrategies" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="RiskAssessments" EntityType="Self.RiskAssessments" Schema="dbo" store:Type="Tables" />
@@ -130,9 +143,12 @@
             <End Role="RiskCategories" EntitySet="RiskCategories" />
             <End Role="Risks" EntitySet="Risks" />
           </AssociationSet>
+          <AssociationSet Name="FK_RiskAssessments_Users" Association="Self.FK_RiskAssessments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="RiskBDModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -157,6 +173,8 @@
           <Property Name="LevelID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="RiskLevels" Relationship="Self.FK__RiskAsses__Level__571DF1D5" FromRole="RiskAssessments" ToRole="RiskLevels" />
           <NavigationProperty Name="Risks" Relationship="Self.FK__RiskAsses__RiskI__5535A963" FromRole="RiskAssessments" ToRole="Risks" />
+          <Property Name="UserID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="RiskBDModel.FK_RiskAssessments_Users" FromRole="RiskAssessments" ToRole="Users" />
         </EntityType>
         <EntityType Name="RiskCategories">
           <Key>
@@ -197,6 +215,7 @@
           <Property Name="Username" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="PasswordHash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Role" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="RiskAssessments" Relationship="RiskBDModel.FK_RiskAssessments_Users" FromRole="Users" ToRole="RiskAssessments" />
         </EntityType>
         <Association Name="FK__Mitigatio__RiskI__52593CB8">
           <End Role="Risks" Type="Self.Risks" Multiplicity="1" />
@@ -269,7 +288,23 @@
             <End Role="RiskCategories" EntitySet="RiskCategories" />
             <End Role="Risks" EntitySet="Risks" />
           </AssociationSet>
+          <AssociationSet Name="FK_RiskAssessments_Users" Association="RiskBDModel.FK_RiskAssessments_Users">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="RiskAssessments" EntitySet="RiskAssessments" />
+          </AssociationSet>
         </EntityContainer>
+        <Association Name="FK_RiskAssessments_Users">
+          <End Type="RiskBDModel.Users" Role="Users" Multiplicity="1" />
+          <End Type="RiskBDModel.RiskAssessments" Role="RiskAssessments" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="RiskAssessments">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -290,6 +325,7 @@
           <EntitySetMapping Name="RiskAssessments">
             <EntityTypeMapping TypeName="RiskBDModel.RiskAssessments">
               <MappingFragment StoreEntitySet="RiskAssessments">
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
                 <ScalarProperty Name="AssessmentID" ColumnName="AssessmentID" />
                 <ScalarProperty Name="RiskID" ColumnName="RiskID" />
                 <ScalarProperty Name="AssessmentDate" ColumnName="AssessmentDate" />

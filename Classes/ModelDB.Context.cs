@@ -16,9 +16,10 @@ namespace Risk_Work.Classes
     public partial class RiskBDEntities : DbContext
     {
         private static RiskBDEntities _context;
+
         public static RiskBDEntities GetContext()
         {
-            if (_context == null)
+            if(_context == null)
                 _context = new RiskBDEntities();
             return _context;
         }

@@ -15,6 +15,7 @@
         <AssociationConnector Association="RiskBDModel.FK__RiskAsses__Level__571DF1D5" ManuallyRouted="false" />
         <AssociationConnector Association="RiskBDModel.FK__RiskAsses__RiskI__5535A963" ManuallyRouted="false" />
         <AssociationConnector Association="RiskBDModel.FK__Risks__CategoryI__4AB81AF0" ManuallyRouted="false" />
+        <AssociationConnector Association="RiskBDModel.FK_RiskAssessments_Users" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

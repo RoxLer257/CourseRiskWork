@@ -121,6 +121,7 @@ namespace Risk_Work.Pages
                 _riskAssessment.RiskID = risk.RiskID;
                 _riskAssessment.AssessmentDate = DateAssessment.SelectedDate ?? DateTime.Now;
                 _riskAssessment.LevelID = levelID;
+                _riskAssessment.UserID = ClassFrame.UserID;
 
                 context.SaveChanges();
 

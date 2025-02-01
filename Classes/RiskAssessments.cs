@@ -18,8 +18,10 @@ namespace Risk_Work.Classes
         public int RiskID { get; set; }
         public System.DateTime AssessmentDate { get; set; }
         public int LevelID { get; set; }
+        public int UserID { get; set; }
     
         public virtual RiskLevels RiskLevels { get; set; }
         public virtual Risks Risks { get; set; }
+        public virtual Users Users { get; set; }
     }
 }
